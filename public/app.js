@@ -8,4 +8,6 @@ $(function() {
 
 
     var cat = new CategoryModel();
+
+    console.log(cat);
 });
