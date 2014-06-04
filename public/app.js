@@ -6,6 +6,10 @@ $(function() {
         }
     });
 
+    var TemplateModel = Backbone.Model.extend({
+
+    });
+
 
 
     // COLLECTIONS
@@ -14,6 +18,18 @@ $(function() {
 
         url: '/categories'
     });
+
+    var TemplatesCollection = Backbone.Collection.extend({
+        model: TemplateModel,
+
+        url: function() {
+            return _.result(this.category, "url") + '/templates';
+        },
+
+        initialize: function(options) {
+            this.category = options.category;
+        }
+    })
 
 
 
@@ -26,15 +42,29 @@ $(function() {
         },
 
         initialize: function() {
-            this.template = _.template('<strong><%= category.name %></strong>')
+            this.template = _.template('<strong><%= category.name %></strong><ul></ul>');
 
-            this.render();
+            this.collection = new TemplatesCollection({ category: this.model });
+
+            this.listenTo(this.collection, "sync", this.render);
+
+            this.collection.fetch();
         },
 
         render: function() {
             this.$el.html(this.template({
                 category: this.model.toJSON()
             }));
+
+            this.$el.find("ul").empty();
+
+            var _this = this;
+
+            this.collection.each(function(t) {
+                var view = new TemplateView({ model: t });
+
+                _this.$el.find("ul").append(view.el);
+            })
         },
 
         changeName: function() {
@@ -65,6 +95,22 @@ $(function() {
 
                 _this.$el.append(view.el);
             });
+        }
+    });
+
+    var TemplateView = Backbone.View.extend({
+        tagName: "li",
+
+        initialize: function() {
+            this.template = _.template('<h3><%= template.name %>: </h3><p><%= template.body %></p>');
+
+            this.render();
+        },
+
+        render: function() {
+            this.$el.html(this.template({
+                template: this.model.toJSON()
+            }));
         }
     });
 
