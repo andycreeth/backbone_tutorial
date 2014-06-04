@@ -7,7 +7,24 @@ $(function() {
     });
 
 
+
+
+    // VIEWS
+    var CategoryView = Backbone.View.extend({
+        initialize: function() {
+            this.render();
+        },
+
+        render: function() {
+            this.$el.html("Hello World");
+        }
+    })
+
+
+
     var cat = new CategoryModel();
 
-    console.log(cat);
+    var catView = new CategoryView();
+
+    $("#app-container").html(catView.el);
 });
