@@ -10,7 +10,9 @@ $(function() {
 
     // COLLECTIONS
     var CategoriesCollection = Backbone.Collection.extend({
-        model: CategoryModel
+        model: CategoryModel,
+
+        url: '/categories'
     });
 
 
@@ -36,7 +38,11 @@ $(function() {
         tagName: "ul",
 
         initialize: function() {
-            this.render();
+            this.collection = new CategoriesCollection();
+
+            this.listenTo(this.collection, "sync", this.render);
+
+            this.collection.fetch();
         },
 
         render: function() {
@@ -50,17 +56,7 @@ $(function() {
         }
     });
 
-
-
-    var cat = new CategoryModel();
-    var cat2 = new CategoryModel();
-
-    var cats = new CategoriesCollection();
-
-    cats.add(cat);
-    cats.add(cat2);
-
-    var view = new CategoriesView({ collection: cats });
+    var view = new CategoriesView();
 
     $("#app-container").html(view.el);
 });
