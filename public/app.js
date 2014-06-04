@@ -30,6 +30,22 @@ $(function() {
         }
     })
 
+    var CategoriesView = Backbone.View.extend({
+        initialize: function() {
+            this.render();
+        },
+
+        render: function() {
+            var _this  = this;
+
+            this.collection.each(function(c) {
+                var view = new CategoryView({ model: c });
+
+                _this.$el.append(view.el);
+            });
+        }
+    });
+
 
 
     var cat = new CategoryModel();
@@ -40,9 +56,7 @@ $(function() {
     cats.add(cat);
     cats.add(cat2);
 
-    cats.each(function(c) {
-        var view = new CategoryView({ model: c });
+    var view = new CategoriesView({ collection: cats });
 
-        $("#app-container").append(view.el);
-    });
+    $("#app-container").html(view.el);
 });
