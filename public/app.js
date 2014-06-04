@@ -17,6 +17,8 @@ $(function() {
 
     // VIEWS
     var CategoryView = Backbone.View.extend({
+        tagName: "li",
+
         initialize: function() {
             this.template = _.template('<strong><%= category.name %></strong>')
 
@@ -31,6 +33,8 @@ $(function() {
     })
 
     var CategoriesView = Backbone.View.extend({
+        tagName: "ul",
+
         initialize: function() {
             this.render();
         },
