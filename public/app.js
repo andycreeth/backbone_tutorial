@@ -21,6 +21,10 @@ $(function() {
     var CategoryView = Backbone.View.extend({
         tagName: "li",
 
+        events: {
+            "click": "changeName"
+        },
+
         initialize: function() {
             this.template = _.template('<strong><%= category.name %></strong>')
 
@@ -31,6 +35,12 @@ $(function() {
             this.$el.html(this.template({
                 category: this.model.toJSON()
             }));
+        },
+
+        changeName: function() {
+            this.model.set({ name: "You clicked me!" });
+
+            this.model.save();
         }
     })
 
